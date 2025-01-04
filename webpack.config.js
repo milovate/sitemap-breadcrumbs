@@ -5,7 +5,9 @@ module.exports = {
   output: {
     filename: 'bundle.js', // Output bundled file
     path: path.resolve(__dirname, 'dist'), // Output directory
-    libraryTarget: 'umd', 
+    library: 'LinkHierarchyExtractor', // Expose the class as a global object
+    libraryTarget: 'umd', // Supports multiple module systems
+    globalObject: 'this', // For proper global scope handling in browsers
   },
   module: {
     rules: [
@@ -13,10 +15,15 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
+          loader: 'babel-loader', // Transpile JavaScript with Babel
         },
       },
     ],
   },
-  target: 'node', // This is for Node.js
+  resolve: {
+    fallback: {
+      "https": false,  // Disable https in the browser
+    },
+  },
+  target: 'web', // Build for the browser environment
 };
